@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Notifications;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+
+class ResetPasswordNotification extends Notification
+{
+    use Queueable;
+    //new by me
+   // protected $pageUrl;
+    public $url;
+    /**
+     * Create a new notification instance.
+     *
+     * @return void
+     */
+    public function __construct(string $url)//i removed string $url
+    {
+        
+        $this->url=$url;
+        /*parent::__construct($token);
+        $this->pageUrl = 'localhost:8080';
+*/
+    }
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function via($notifiable)
+    {
+        return ['mail']; 
+        /*if(static::$toMailCallback)
+        {
+            return call_user_func(static::$toMailCallback,$notifiable,$this->token);
+        }*/
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \Illuminate\Notifications\Messages\MailMessage
+     */
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)
+                  //  ->line('The introduction to the notification.')
+                  ->line('forgotPassword')
+                    //->action('Notification Action', url('/'))
+                    ->action('click to reset',$this->url)
+                    ->line('Thank you for using our application!');
+    }
+
+    /**
+     * Get the array representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function toArray($notifiable)
+    {
+        return [
+            //
+        ];
+    }
+}
